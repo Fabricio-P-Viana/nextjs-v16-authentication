@@ -4,7 +4,7 @@ import { hash } from "bcryptjs"
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log("🌱 Iniciando seed do banco de dados...")
+  // console.log("🌱 Iniciando seed do banco de dados...")
 
   // Limpar dados existentes
   await prisma.user.deleteMany()
@@ -20,7 +20,7 @@ async function main() {
     },
   })
 
-  console.log("✅ Admin criado:", { email: admin.email, role: admin.role })
+  // console.log("✅ Admin criado:", { email: admin.email, role: admin.role })
 
   // Criar usuário comum
   const userPassword = await hash("user123", 12)
@@ -33,11 +33,11 @@ async function main() {
     },
   })
 
-  console.log("✅ Usuário criado:", { email: user.email, role: user.role })
+  // console.log("✅ Usuário criado:", { email: user.email, role: user.role })
 
-  console.log("\n📋 Credenciais de teste:")
-  console.log("Admin: admin@example.com / admin123")
-  console.log("User: user@example.com / user123")
+  // console.log("\n📋 Credenciais de teste:")
+  // console.log("Admin: admin@example.com / admin123")
+  // console.log("User: user@example.com / user123")
 }
 
 main()

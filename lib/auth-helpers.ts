@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 export async function requireAuth() {
   const session = await getServerSession(authOptions)
 
-  console.log(" requireAuth - Session:", session ? { user: session.user } : null)
+  // console.log(" requireAuth - Session:", session ? { user: session.user } : null)
 
   if (!session) {
     redirect("/login")
@@ -17,7 +17,7 @@ export async function requireAuth() {
 export async function requireAdmin() {
   const session = await requireAuth()
 
-  console.log(" requireAdmin - User role:", session.user.role)
+  // console.log(" requireAdmin - User role:", session.user.role)
 
   if (session.user.role !== "admin") {
     redirect("/dashboard")
@@ -28,6 +28,6 @@ export async function requireAdmin() {
 
 export async function getSession() {
   const session = await getServerSession(authOptions)
-  console.log(" getSession:", session ? { user: session.user } : null)
+  // console.log(" getSession:", session ? { user: session.user } : null)
   return session
 }

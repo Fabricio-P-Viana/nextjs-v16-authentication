@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Senha incorreta")
         }
 
-        console.log(" authorize - User authenticated:", { id: user.id, email: user.email, role: user.role })
+        // console.log(" authorize - User authenticated:", { id: user.id, email: user.email, role: user.role })
 
         return {
           id: user.id,
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = user.role
-        console.log(" jwt callback - Token updated:", { id: token.id, role: token.role })
+        // console.log(" jwt callback - Token updated:", { id: token.id, role: token.role })
       }
       return token
     },
@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id
         session.user.role = token.role
-        console.log(" session callback - Session created:", { user: session.user })
+        // console.log(" session callback - Session created:", { user: session.user })
       }
       return session
     },
