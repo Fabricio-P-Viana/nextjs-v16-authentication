@@ -1,10 +1,11 @@
+import { ROLE_ADMIN, ROLE_USER } from "@/types/auth"
 import { PrismaClient } from "@prisma/client"
 import { hash } from "bcryptjs"
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // console.log("🌱 Iniciando seed do banco de dados...")
+  console.log("🌱 Iniciando seed do banco de dados...")
 
   // Limpar dados existentes
   await prisma.user.deleteMany()
@@ -16,11 +17,11 @@ async function main() {
       email: "admin@example.com",
       name: "Administrador",
       password: adminPassword,
-      role: "ADMIN",
+      role: ROLE_ADMIN,
     },
   })
 
-  // console.log("✅ Admin criado:", { email: admin.email, role: admin.role })
+  console.log("✅ Admin criado:", { email: admin.email, role: admin.role })
 
   // Criar usuário comum
   const userPassword = await hash("user123", 12)
@@ -29,15 +30,15 @@ async function main() {
       email: "user@example.com",
       name: "Usuário Teste",
       password: userPassword,
-      role: "USER",
+      role: ROLE_USER,
     },
   })
 
-  // console.log("✅ Usuário criado:", { email: user.email, role: user.role })
+  console.log("✅ Usuário criado:", { email: user.email, role: user.role })
 
-  // console.log("\n📋 Credenciais de teste:")
-  // console.log("Admin: admin@example.com / admin123")
-  // console.log("User: user@example.com / user123")
+  console.log("\n📋 Credenciais de teste:")
+  console.log("Admin: admin@example.com / admin123")
+  console.log("User: user@example.com / user123")
 }
 
 main()

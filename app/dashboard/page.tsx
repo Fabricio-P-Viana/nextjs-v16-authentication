@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Shield } from "lucide-react"
+import { ROLE_ADMIN } from "@/types/auth"
 
 export default async function DashboardPage() {
   const session = await requireAuth()
@@ -45,7 +46,7 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {session.user.role === "admin" && (
+          {session.user.role === ROLE_ADMIN && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

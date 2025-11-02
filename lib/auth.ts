@@ -2,6 +2,7 @@ import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { compare, hash } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { TRoles, ROLE_USER } from "@/types/auth"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -36,7 +37,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role.toLowerCase() as "user" | "admin",
+          role: user.role,
         }
       },
     }),
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 dias
+    maxAge:  Number(process.env.NEXTAUTH_MAX_AGE_SESSION_HOURS || 3) * 60 * 60,
   },
   cookies: {
     sessionToken: {
@@ -93,7 +94,7 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === "development",
 }
 
-export async function registerUser(email: string, password: string, name: string, role: "user" | "admin" = "user") {
+export async function registerUser(email: string, password: string, name: string, role: TRoles = ROLE_USER) {
   const existingUser = await prisma.user.findUnique({
     where: { email },
   })
@@ -109,7 +110,7 @@ export async function registerUser(email: string, password: string, name: string
       email,
       name,
       password: hashedPassword,
-      role: role.toUpperCase() as "USER" | "ADMIN",
+      role,
     },
   })
 
@@ -117,7 +118,7 @@ export async function registerUser(email: string, password: string, name: string
     id: newUser.id,
     email: newUser.email,
     name: newUser.name,
-    role: newUser.role.toLowerCase() as "user" | "admin",
+    role: newUser.role,
   }
 }
 
@@ -135,22 +136,19 @@ export async function getAllUsers() {
     },
   })
 
-  return users.map((user) => ({
-    ...user,
-    role: user.role.toLowerCase() as "user" | "admin",
-  }))
+  return users
 }
 
-export async function updateUserRole(userId: string, role: "user" | "admin") {
+export async function updateUserRole(userId: string, role: TRoles) {
   const user = await prisma.user.update({
     where: { id: userId },
-    data: { role: role.toUpperCase() as "USER" | "ADMIN" },
+    data: { role },
   })
 
   return {
     id: user.id,
     email: user.email,
     name: user.name,
-    role: user.role.toLowerCase() as "user" | "admin",
+    role: user.role,
   }
 }

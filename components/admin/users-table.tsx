@@ -5,12 +5,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
+import { ROLE_ADMIN, TRoles } from "@/types/auth"
 
 interface User {
   id: string
   name: string
   email: string
-  role: "user" | "admin"
+  role: TRoles
 }
 
 interface UsersTableProps {
@@ -22,7 +23,7 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
   const [users, setUsers] = useState(initialUsers)
   const [loading, setLoading] = useState<string | null>(null)
 
-  const handleRoleChange = async (userId: string, newRole: "user" | "admin") => {
+  const handleRoleChange = async (userId: string, newRole: TRoles) => {
     setLoading(userId)
 
     try {
@@ -67,12 +68,12 @@ export function UsersTable({ initialUsers }: UsersTableProps) {
                 <TableCell className="font-medium">{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
-                  <Badge variant={user.role === "admin" ? "default" : "secondary"}>{user.role}</Badge>
+                  <Badge variant={user.role === ROLE_ADMIN ? "default" : "secondary"}>{user.role}</Badge>
                 </TableCell>
                 <TableCell>
                   <Select
                     value={user.role}
-                    onValueChange={(value) => handleRoleChange(user.id, value as "user" | "admin")}
+                    onValueChange={(value) => handleRoleChange(user.id, value as TRoles)}
                     disabled={loading === user.id}
                   >
                     <SelectTrigger className="w-32">

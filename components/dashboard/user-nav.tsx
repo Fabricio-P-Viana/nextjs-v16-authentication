@@ -11,12 +11,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { TRoles } from "@/types/auth"
 
 interface UserNavProps {
   user: {
     name?: string | null
     email?: string | null
-    role: "user" | "admin"
+    role: TRoles
   }
 }
 

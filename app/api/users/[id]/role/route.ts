@@ -1,22 +1,23 @@
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { authOptions, updateUserRole } from "@/lib/auth"
+import { ROLE_ADMIN, ROLE_USER } from "@/types/auth"
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
-
+  console.log("Session:", session)
   if (!session) {
     return NextResponse.json({ error: "Não autenticado" }, { status: 401 })
   }
 
-  if (session.user.role !== "admin") {
+  if (session.user.role !== ROLE_ADMIN) {
     return NextResponse.json({ error: "Acesso negado. Apenas administradores." }, { status: 403 })
   }
 
   const { role } = await request.json()
 
-  if (!role || (role !== "user" && role !== "admin")) {
-    return NextResponse.json({ error: "Role inválido. Use 'user' ou 'admin'." }, { status: 400 })
+  if (!role || (role !== ROLE_USER && role !== ROLE_ADMIN)) {
+    return NextResponse.json({ error: "Role inválido." }, { status: 400 })
   }
 
   try {

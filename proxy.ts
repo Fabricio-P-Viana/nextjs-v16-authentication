@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { ROLE_ADMIN } from "@/types/auth"
 
 export async function proxy(req: NextRequest) {
   const token = await getToken({
@@ -19,7 +20,7 @@ export async function proxy(req: NextRequest) {
   }
 
   // Se está em página admin e não é admin, redireciona para dashboard
-  if (isAdminPage && token?.role !== "admin") {
+  if (isAdminPage && token?.role !== ROLE_ADMIN) {
     if (!isAuth) {
       const loginUrl = new URL("/login", req.url)
       loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname)
